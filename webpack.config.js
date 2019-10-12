@@ -23,10 +23,32 @@ module.exports = {
             {
                 test: /\.m?js$/,
                 exclude: /(node_modules|bower_components)/,
-                use: {
-                    loader: 'babel-loader'
-                }
+                use: [
+                    // last loader require return string | Buffer
+                    {
+                        loader: 'after-babel-loader'
+                    }, 
+                    {
+                        loader: 'babel-loader'
+                    }, 
+                    // custom loader
+                    {
+                        loader: 'before-babel-loader',
+                        options: {
+                            // optional 
+                            test: 'xxxx', 
+                            hello: /^(21\d{5})(\d{5})(\d)$/
+                        }
+                    }
+                ]
             }
+        ]
+    },
+    // loader resolve
+    resolveLoader: {
+        modules: [
+            'node_modules', 
+            path.resolve(__dirname, 'loaders')
         ]
     },
     plugins: [
